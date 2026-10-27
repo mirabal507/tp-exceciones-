@@ -1,0 +1,83 @@
+Lautaro Mirabal 5°14
+
+cada ejercicio es un programa independiente, por lo que debe tener su propio Main si se ejecuta por separado. 
+En el ejercicio 2, la excepción se vuelve a lanzar intencionalmente mediante throw;, tal como pide el enunciado.
+
+
+Trabajo Práctico N.º 14 – Excepciones
+Ejercicio 1: Estructura fundamental, cascada y garantía de finally
+using System;
+
+class Program
+{
+    static int CalcularPromedio(int sumaTotal, int cantidad)
+    {
+        if (sumaTotal < 0)
+        {
+            throw new ArgumentOutOfRangeException("sumaTotal");
+        }
+
+        return sumaTotal / cantidad;
+    }
+
+    static void Main()
+    {
+        try
+        {
+            int promedio = CalcularPromedio(100, 5);
+            Console.WriteLine("El promedio es: " + promedio);
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+        }
+        catch (DivideByZeroException ex)
+        {
+            Console.WriteLine("Error: no se puede dividir por cero.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error general: " + ex.Message);
+        }
+        finally
+        {
+            Console.WriteLine("El bloque finally se ejecutó.");
+        }
+    }
+}
+
+
+
+Ejercicio 2: Lanzamiento de excepciones, filtros when y relanzamiento (throw)
+using System;
+
+class Program
+{
+    static void ValidarAcceso(string usuario, int edad)
+    {
+        if (usuario == null)
+        {
+            throw new ArgumentNullException("usuario");
+        }
+
+        if (edad < 0)
+        {
+            throw new ArgumentException(
+                "La edad no puede ser menor que cero.", "edad");
+        }
+    }
+
+    static void Main()
+    {
+        try
+        {
+            ValidarAcceso("Juan", -5);
+        }
+        catch (ArgumentException ex) when (ex.ParamName == "edad")
+        {
+            Console.WriteLine("Registro de error: " + ex.Message);
+            throw;
+        }
+    }
+}
+
